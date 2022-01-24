@@ -1,129 +1,136 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+welcome_text = """
+|===========Bileşik Faiz Hesaplayıcı================|
+|                                                   |
+|              Programa Hoşgeldiniz!                |
+|                   Sürüm 0.1                       |
+|            Devam Etmek İçin İsim Soyisim          |
+|                    Giriniz                        |
+|                                                   |
+|===========Compound Interest Calculator============| 
+"""
+welcome_text_eng = """
+|===========Compound Interest Calculator============|
+|                                                   |
+|             Welcome To The Program!               |
+|                   Version 0.1                     |
+|              Enter Name and Surname               |
+|                   to Continue                     |
+|                                                   |
+|===========Bileşik Faiz Hesaplayıcı================| 
+"""
+welcome_dil=("""
+|===========Bileşik Faiz Hesaplayıcı================|
+|                                                   |
+|                                                   |
+|             eng Document For English              |
+|             Türkçe Açıklama İçin tr               |
+|                                                   |
+|                                                   |
+|===========Compound Interest Calculator============| 
+""")
+def print_duration(ay):
+    print('year: ' + str(int(ay/12)) + ', month: ' + str(int(ay % 12)))
 
-# C extensions
-*.so
+def print_duration_tr(ay):
+    print('Yıl: ' + str(int(ay/12)) + ', Ay: ' + str(int(ay % 12)))
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+def print_money(tutar):
+    print('{:.1f}$'.format(tutar))
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+def print_money_tr(tutar):
+    print('{:.1f}₺'.format(tutar))
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+def print_entry(kredi_tutari, int_rate, ay):
+    toplam_faiz = (kredi_tutari / 100) * (int_rate / 12) * ay
+    print('-> ', end='') # Entry başlangıcı
+    print_duration(ay)
+    print('Total Payment:')
+    print_money(kredi_tutari + toplam_faiz)
+    print('Monthly Payment:')
+    print_money((kredi_tutari + toplam_faiz) / ay)
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
+def print_entry_tr(kredi_tutari, int_rate, ay):
+    toplam_faiz = (kredi_tutari / 100) * (int_rate / 12) * ay
+    print('-> ', end='') # Entry başlangıcı
+    print_duration_tr(ay)
+    print('Toplam Ödeme:')
+    print_money_tr(kredi_tutari + toplam_faiz)
+    print('Aylık Ödeme:')
+    print_money_tr((kredi_tutari + toplam_faiz) / ay)
 
-# Translations
-*.mo
-*.pot
+def print_full_report(kredi_tutari, int_rate, max_yil, max_ay, yineleme):
+    loan_terms_in_months = (max_yil * 12) + max_ay
+    loan_duration = yineleme
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+    while(loan_duration <= loan_terms_in_months):
+        print('-----------------------------------------------------')
+        print_entry(kredi_tutari, int_rate, loan_duration)
+        print('-----------------------------------------------------')
+        loan_duration += yineleme
 
-# Flask stuff:
-instance/
-.webassets-cache
+def print_full_report_tr(kredi_tutari, int_rate, max_yil, max_ay, yineleme):
+    loan_terms_in_months = (max_yil * 12) + max_ay
+    loan_duration = yineleme
 
-# Scrapy stuff:
-.scrapy
+    while(loan_duration <= loan_terms_in_months):
+        print('-----------------------------------------------------')
+        print_entry_tr(kredi_tutari, int_rate, loan_duration)
+        print('-----------------------------------------------------')
+        loan_duration += yineleme
 
-# Sphinx documentation
-docs/_build/
+def get_user_data():
+        user_name = input('Please enter your name: ')
+        kredi_tutari = float(input('Loan amount: '))
+        int_rate  = float(input('Interest rate (per year): '))
+        print('->\tTIME LENGTH')
+        max_yil = int(input('\tLoan terms in years: '))
+        max_ay = int(input('\tLoan terms in months: '))
+        yineleme = int(input('\tIteration in months: '))
 
-# PyBuilder
-target/
+        return (user_name, kredi_tutari, int_rate, max_yil, max_ay, yineleme)
 
-# Jupyter Notebook
-.ipynb_checkpoints
+def get_user_data_tr():
+        user_name = input('Lütfen Adınızı Giriniz: ')
+        kredi_tutari = float(input('Kredi Tutarı              :'))
+        int_rate  = float(input('Faiz Oranı      (Yıllık): '))
+        print('->\tZAMAN ARALIĞI')
+        max_yil = int(input('\tMaksimum Yıl              :'))
+        max_ay = int(input('\tMaksimum Ay               :'))
+        yineleme = int(input('\tYineleme Aralığı          :'))
 
-# IPython
-profile_default/
-ipython_config.py
+        return (user_name, kredi_tutari, int_rate, max_yil, max_ay, yineleme)
 
-# pyenv
-.python-version
+def main():
+    print(welcome_text_eng)
+    user_data = get_user_data()
+    print('Report for ' + user_data[0], end='\n\n')
+    print_full_report(user_data[1], user_data[2], user_data[3], user_data[4], user_data[5])
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
+def main_tr():
+    print(welcome_text)
+    user_data = get_user_data_tr()
+    print(user_data[0],'İçin Raporlar', end='\n\n')
+    print_full_report_tr(user_data[1], user_data[2], user_data[3], user_data[4], user_data[5])
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
+def dils():
+    print(welcome_dil)
+    lang= input("").lower()
+    if (lang == "tr"):
+        main_tr()
+        input("Kapatmak İçin Entere Basınız.")
+    elif (lang == "eng"):
+        main()
+        input("Press Enter to Close.")
+    else:
+        print("Lütfen Geçerli Bir Dil Giriniz./Please Enter A Valid Language. ")
+        dils()
 
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
+if __name__ == "__main__":
+    dils()
 
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
+#input("Kapatmak İçin Entere Basınız./Press Enter to Close.")
+#### TEST CASES ####
+#print_duration_tr(max_month) #TEST1
+#print_money_tr(loan_amount) #TEST2
+#print_entry_tr(100, 12, 18) #TEST3
+#print_full_report_tr(100, 12, 1, 6, 3)
